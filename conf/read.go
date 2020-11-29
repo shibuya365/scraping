@@ -7,6 +7,8 @@ import (
 
 type Data struct {
 	Title string `json:"title"`
+	Attr  string `json:"attr"`
+	Date  string `json:"date"`
 }
 
 var news []Data
