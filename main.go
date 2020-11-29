@@ -12,11 +12,10 @@ import (
 )
 
 var webs map[string]string = map[string]string{
-	"TOP":      "https://news.yahoo.co.jp/",
-	"DOMESTIC": "https://news.yahoo.co.jp/categories/domestic",
-	"WORLD":    "https://news.yahoo.co.jp/categories/world",
-	"Business": "https://news.yahoo.co.jp/categories/business",
-	"IT":       "https://news.yahoo.co.jp/categories/it",
+	"国内":   "https://news.yahoo.co.jp/categories/domestic",
+	"国際":   "https://news.yahoo.co.jp/categories/world",
+	"ビジネス": "https://news.yahoo.co.jp/categories/business",
+	"IT":   "https://news.yahoo.co.jp/categories/it",
 }
 
 func main() {
@@ -32,7 +31,7 @@ func main() {
 	defer file.Close()
 	// 1行目を記入
 	// _, err := file.WriteString("## news\n")
-	file.WriteString("### " + today + " News\n")
+	file.WriteString("# " + today + " News\n")
 
 	// 設定ファイルを読み込む
 	news, err := conf.ReadConfDB()
@@ -46,59 +45,60 @@ func main() {
 		mapNews[news[i].Title] = true
 	}
 
-	// ニュースの読み込み
-	for _, v := range webs {
-		fmt.Println(v)
+	for i, v := range webs {
+		// カテゴリをMDへ
+		file.WriteString("## " + i + "\n")
 
-	}
-
-	res, err := http.Get("https://news.yahoo.co.jp/")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer res.Body.Close()
-	if res.StatusCode != 200 {
-		log.Fatalf("status code error: %d %s\n", res.StatusCode, res.Status)
-	}
-
-	// タイトルの部分の抜き出し
-	doc, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		log.Println(err)
-	}
-	section := doc.Find(".topicsList_main a")
-
-	// 個別のニュースをチェック
-	for i := 0; i < 8; i++ {
-		line := section.Eq(i)
-
-		// ニュースタイトル
-		text := line.Text()
-
-		// 属性を取得、existsはその属性が存在するか
-		attr, _ := line.Attr("href")
-		// fmt.Println(line.Attr("href"))
-
-		// タイトルが既にあるか調べる
-		_, ok := mapNews[text]
-
-		// なかった場合の処理
-		if !ok {
-			// 今日のファイルへの書き込み
-			// fmt.Fprint()の場合
-			// _, err := fmt.Fprint(file, text)
-			_, err := file.WriteString("- [" + text + "](" + attr + ")\n")
-			if err != nil {
-				log.Println(err)
-			}
-
-			// 新しいデータの作成
-			var data conf.Data
-			data.Date = today
-			data.Title = text
-			data.Attr = attr
-			news = append(news, data)
+		// ニュースの読み込み
+		res, err := http.Get(v)
+		if err != nil {
+			log.Fatalln(err)
 		}
+		defer res.Body.Close()
+		if res.StatusCode != 200 {
+			log.Fatalf("status code error: %d %s\n", res.StatusCode, res.Status)
+		}
+
+		// タイトルの部分の抜き出し
+		doc, err := goquery.NewDocumentFromReader(res.Body)
+		if err != nil {
+			log.Println(err)
+		}
+		section := doc.Find(".topicsList_main a")
+
+		// 個別のニュースをチェック
+		for i := 0; i < 8; i++ {
+			line := section.Eq(i)
+
+			// ニュースタイトル
+			text := line.Text()
+
+			// 属性を取得、existsはその属性が存在するか
+			attr, _ := line.Attr("href")
+			// fmt.Println(line.Attr("href"))
+
+			// タイトルが既にあるか調べる
+			_, ok := mapNews[text]
+
+			// なかった場合の処理
+			if !ok {
+				// 今日のファイルへの書き込み
+				// fmt.Fprint()の場合
+				// _, err := fmt.Fprint(file, text)
+				_, err := file.WriteString("- [" + text + "](" + attr + ")\n")
+				if err != nil {
+					log.Println(err)
+				}
+
+				// 新しいデータの作成
+				var data conf.Data
+				data.Date = today
+				data.Title = text
+				data.Attr = attr
+				news = append(news, data)
+			}
+		}
+
 		// データの保存
 		err = conf.WriteConfDB(news)
 		if err != nil {

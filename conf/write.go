@@ -7,7 +7,7 @@ import (
 
 func WriteConfDB(news []Data) error {
 	// ファイルの生成
-	file, err := os.Create("conf/db2.json")
+	file, err := os.Create("conf/db.json")
 	if err != nil {
 		return err
 	}
