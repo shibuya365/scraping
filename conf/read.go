@@ -22,12 +22,11 @@ func ReadConfDB() ([]Data, error) {
 		return news, err
 	}
 
+	// JSONをnewsへ変換
 	err = json.Unmarshal(myJson, &news)
-
 	if err != nil {
 		return news, err
 	}
 
-	// fmt.Printf("News : %v", news)
 	return news, nil
 }

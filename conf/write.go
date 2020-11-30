@@ -21,8 +21,6 @@ func WriteConfDB(news []Data) error {
 
 	// 正常に生成されたファイルに書き込み
 	file.Write(([]byte)(string(myJson)))
-	// エンコードされたデータをコンソールに表示
-	// fmt.Println(string(myJson))
 
 	return nil
 }

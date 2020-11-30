@@ -11,6 +11,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// Yahoo!のニュースサイトのアドレス
 var webs map[string]string = map[string]string{
 	"国内":   "https://news.yahoo.co.jp/categories/domestic",
 	"国際":   "https://news.yahoo.co.jp/categories/world",
@@ -22,15 +23,16 @@ func main() {
 	// 今日の日付
 	day := time.Now()
 	today := day.Format("2006-01-02")
+	time := day.Format("2006-01-02 03:04:05")
 
 	// 今日の新しいニュースのファイルの生成
-	file, err := os.Create("news" + today + ".md")
+	file, err := os.Create("news" + time + ".md")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	defer file.Close()
-	// 1行目を記入
-	// _, err := file.WriteString("## news\n")
+
+	// 1行目にタイトルを記入
 	file.WriteString("# " + today + " News\n")
 
 	// 設定ファイルを読み込む
@@ -70,12 +72,11 @@ func main() {
 		for i := 0; i < 8; i++ {
 			line := section.Eq(i)
 
-			// ニュースタイトル
+			// ニュースタイトルを取得
 			text := line.Text()
 
-			// 属性を取得、existsはその属性が存在するか
+			// href属性を取得
 			attr, _ := line.Attr("href")
-			// fmt.Println(line.Attr("href"))
 
 			// タイトルが既にあるか調べる
 			_, ok := mapNews[text]
@@ -83,8 +84,6 @@ func main() {
 			// なかった場合の処理
 			if !ok {
 				// 今日のファイルへの書き込み
-				// fmt.Fprint()の場合
-				// _, err := fmt.Fprint(file, text)
 				_, err := file.WriteString("- [" + text + "](" + attr + ")\n")
 				if err != nil {
 					log.Println(err)
