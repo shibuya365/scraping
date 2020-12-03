@@ -83,6 +83,8 @@ func main() {
 
 			// なかった場合の処理
 			if !ok {
+				// コンソールへ新しいニュースのタイトルのみ出力
+				fmt.Println(text)
 				// 今日のファイルへの書き込み
 				_, err := file.WriteString("- [" + text + "](" + attr + ")\n")
 				if err != nil {
