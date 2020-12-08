@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"./conf" // 実装した設定ファイルパッケージの読み込み
+	"example.com/get_yahoo_news/conf"
 	"github.com/PuerkitoBio/goquery"
 )
 
@@ -47,6 +47,7 @@ func main() {
 		mapNews[news[i].Title] = true
 	}
 
+	// カテゴリごとに繰り返す
 	for i, v := range webs {
 		// カテゴリをMDへ
 		file.WriteString("## " + i + "\n")
@@ -69,8 +70,7 @@ func main() {
 		section := doc.Find(".topicsList_main a")
 
 		// 個別のニュースをチェック
-		for i := 0; i < 8; i++ {
-			line := section.Eq(i)
+		section.Each(func(i int, line *goquery.Selection) {
 
 			// ニュースタイトルを取得
 			text := line.Text()
@@ -98,13 +98,13 @@ func main() {
 				data.Attr = attr
 				news = append(news, data)
 			}
-		}
+		})
+	}
 
-		// データの保存
-		err = conf.WriteConfDB(news)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
+	// 全てのニュース追加後データの保存
+	err = conf.WriteConfDB(news)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
 
 }

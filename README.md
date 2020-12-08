@@ -2,13 +2,18 @@
  
 自動でYahoo!ニュースのタイトルを取得する
 # DEMO
-`golang`をインストールした状態で
-```bash
-go get github.com/PuerkitoBio/goquery
-git clone https://github.com/shibuya365/scraping.git
-cd examples
-go run .
-```
+ex.
+## 国内
+- [政府、追加経済対策に73兆円](https://news.yahoo.co.jp/pickup/6378687)
+- [地方移住し家購入 政府支援へ](https://news.yahoo.co.jp/pickup/6378693)
+- [医療深刻 自衛隊は最後の手段](https://news.yahoo.co.jp/pickup/6378688)
+- [GoTo利用者は感染疑い2倍 調査](https://news.yahoo.co.jp/pickup/6378685)
+## ビジネス
+- [中国系の太陽光5社 所得隠し](https://news.yahoo.co.jp/pickup/6378702)
+- [GoTo電子クーポン 不正続く](https://news.yahoo.co.jp/pickup/6378696)
+## IT
+- [流行語大賞どう話題に?分析](https://news.yahoo.co.jp/pickup/6378691)
+
 # Features
 既に一度見たファイルをJSONファイルの保存し新しいニュースのみ`今日の日付と時刻.md`にまとめる
 そのニュースタイトルをクリックすると詳しいニュースを表示する
@@ -30,7 +35,9 @@ DEMOの実行方法など、"hoge"の基本的な使い方を説明する
  
 ```bash
 git clone https://github.com/shibuya365/scraping.git
-cd examples
+cd your_folder
+go mod your_folder
+go build
 go run .
 ```
  
