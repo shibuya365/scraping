@@ -68,7 +68,7 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-		section := doc.Find(".topicsList_main a")
+		section := doc.Find(".sc-cgzHhG a")
 
 		// 個別のニュースをチェック
 		section.Each(func(i int, line *goquery.Selection) {
