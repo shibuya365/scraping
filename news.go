@@ -27,6 +27,7 @@ func main() {
 
 	// 今日の新しいニュースのファイルの生成
 	file, err := os.Create("news" + time + ".md")
+	// file, err := os.Create("news.md")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -48,12 +49,12 @@ func main() {
 	}
 
 	// カテゴリごとに繰り返す
-	for i, v := range webs {
+	for i, web := range webs {
 		// カテゴリをMDへ
 		file.WriteString("## " + i + "\n")
 
 		// ニュースの読み込み
-		res, err := http.Get(v)
+		res, err := http.Get(web)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -93,9 +94,7 @@ func main() {
 
 				// 新しいデータの作成
 				var data conf.Data
-				data.Date = today
 				data.Title = text
-				data.Attr = attr
 				news = append(news, data)
 			}
 		})
