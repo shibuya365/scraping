@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func WriteConfDB(news []Data) error {
+func WriteConfDB(news []string) error {
 	// ファイルの生成
 	file, err := os.Create("conf/db.json")
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
 	"time"
 
 	"example.com/get_yahoo_news/conf"
@@ -43,10 +44,20 @@ func main() {
 	}
 
 	// 古いニュースをmapへ
-	mapNews := make(map[string]bool)
-	for i, _ := range news {
-		mapNews[news[i].Title] = true
-	}
+	// mapNews := make(map[string]bool)
+	// for i, _ := range news {
+	// 	mapNews[news[i]] = true
+	// }
+
+	// 古いニュースをソート
+	sort.Strings(news)
+
+	// 過去のニュースの件数を取得
+	max := len(news)
+	fmt.Println("MAX: ", max)
+
+	// 追加予定のニュースタイトル
+	addTitles := make([]string, 0)
 
 	// カテゴリごとに繰り返す
 	for i, web := range webs {
@@ -80,10 +91,11 @@ func main() {
 			attr, _ := line.Attr("href")
 
 			// タイトルが既にあるか調べる
-			_, ok := mapNews[text]
-
+			// _, ok := mapNews[text]
+			ok := sort.SearchStrings(news, text)
+			fmt.Println(ok)
 			// なかった場合の処理
-			if !ok {
+			if ok >= max {
 				// コンソールへ新しいニュースのタイトルのみ出力
 				fmt.Println(text)
 				// 今日のファイルへの書き込み
@@ -93,12 +105,19 @@ func main() {
 				}
 
 				// 新しいデータの作成
-				var data conf.Data
-				data.Title = text
-				news = append(news, data)
+
+				addTitles = append(addTitles, text)
 			}
 		})
 	}
+
+	// 新しく追加されたタイトルを挿入
+	for _, title := range addTitles {
+		news = append(news, title)
+	}
+
+	// 古いニュースをソート
+	sort.Strings(news)
 
 	// 全てのニュース追加後データの保存
 	err = conf.WriteConfDB(news)

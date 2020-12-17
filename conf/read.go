@@ -5,16 +5,16 @@ import (
 	"io/ioutil"
 )
 
-type Data struct {
-	Title string `json:"title"`
-	// Attr  string `json:"attr"`
-	// Date  string `json:"date"`
-}
+// type Data struct {
+// 	Title string `json:"title"`
+// Attr  string `json:"attr"`
+// Date  string `json:"date"`
+// }
 
-var news []Data
+var news []string
 
 // DB設定読み込み関数
-func ReadConfDB() ([]Data, error) {
+func ReadConfDB() ([]string, error) {
 
 	// 設定ファイルを読み込む
 	myJson, err := ioutil.ReadFile("conf/db.json")
