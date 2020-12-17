@@ -43,14 +43,8 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
-	// 古いニュースをmapへ
-	// mapNews := make(map[string]bool)
-	// for i, _ := range news {
-	// 	mapNews[news[i]] = true
-	// }
-
 	// 古いニュースをソート
-	sort.Strings(news)
+	// sort.Strings(news)
 
 	// 過去のニュースの件数を取得
 	max := len(news)
@@ -104,8 +98,7 @@ func main() {
 					log.Println(err)
 				}
 
-				// 新しいデータの作成
-
+				// 新しいニュースタイトルを追加予定リストへ
 				addTitles = append(addTitles, text)
 			}
 		})
