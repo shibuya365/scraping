@@ -48,7 +48,6 @@ func main() {
 
 	// 過去のニュースの件数を取得
 	max := len(news)
-	fmt.Println("MAX: ", max)
 
 	// 追加予定のニュースタイトル
 	addTitles := make([]string, 0)
@@ -87,7 +86,7 @@ func main() {
 			// タイトルが既にあるか調べる
 			// _, ok := mapNews[text]
 			ok := sort.SearchStrings(news, text)
-			fmt.Println(ok)
+
 			// なかった場合の処理
 			if ok >= max {
 				// コンソールへ新しいニュースのタイトルのみ出力
