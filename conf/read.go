@@ -1,30 +1,28 @@
 package conf // 独自の設定ファイルパッケージ
 
 import (
-	"encoding/json" // DB設定の構造体
-	"io/ioutil"
+	"bufio"
+	"os"
 )
-
-// type Data struct {
-// 	Title string `json:"title"`
-// Attr  string `json:"attr"`
-// Date  string `json:"date"`
-// }
 
 var news []string
 
 // DB設定読み込み関数
 func ReadConfDB() ([]string, error) {
-
 	// 設定ファイルを読み込む
-	myJson, err := ioutil.ReadFile("conf/db.json")
+	f, err := os.Open("conf/news.txt")
 	if err != nil {
 		return news, err
 	}
+	defer f.Close()
 
-	// JSONをnewsへ変換
-	err = json.Unmarshal(myJson, &news)
-	if err != nil {
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		// ここで一行ずつ処理
+		news = append(news, scanner.Text())
+	}
+
+	if err = scanner.Err(); err != nil {
 		return news, err
 	}
 

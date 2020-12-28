@@ -1,26 +1,18 @@
 package conf
 
 import (
-	"encoding/json"
 	"os"
 )
 
 func WriteConfDB(news []string) error {
-	// ファイルの生成
-	file, err := os.Create("conf/db.json")
+	f, err := os.Create("conf/news.txt")
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer f.Close()
 
-	// JSONファイルへ変換
-	myJson, err := json.Marshal(&news)
-	if err != nil {
-		return err
+	for _, line := range news {
+		f.WriteString(line + "\n")
 	}
-
-	// 正常に生成されたファイルに書き込み
-	file.Write(([]byte)(string(myJson)))
-
 	return nil
 }
