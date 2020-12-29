@@ -4,8 +4,8 @@ import (
 	"os"
 )
 
-func WriteConfDB(news []string) error {
-	f, err := os.Create("conf/news.txt")
+func WriteConfDB(cate string, news []string) error {
+	f, err := os.Create("conf/" + cate + ".txt")
 	if err != nil {
 		return err
 	}
