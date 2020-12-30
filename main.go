@@ -70,8 +70,8 @@ func getCate(cate string, web string, wg *sync.WaitGroup) {
 
 		// ニュースが既出が調べる
 		var app bool
-		for _, new := range news {
-			if title == "もっと見る" || title == new {
+		for _, t := range news {
+			if title == "もっと見る" || title == t {
 				app = true
 				break
 			}
@@ -79,7 +79,7 @@ func getCate(cate string, web string, wg *sync.WaitGroup) {
 		// もしなかったら
 		if !app {
 			// コンソールへ新しいニュースのタイトルのみ出力
-			ans += title + "		:" + attr + "\n"
+			ans += title + "	:" + attr + "\n"
 			// 新しいニュースタイトルを追加
 			news = append(news, title)
 		}
@@ -88,8 +88,8 @@ func getCate(cate string, web string, wg *sync.WaitGroup) {
 	fmt.Println(ans)
 
 	// データの保存
-	if len(news) > 12 {
-		news = news[len(news)-19:]
+	if len(news) > 14 {
+		news = news[len(news)-12:]
 	}
 	err = conf.WriteConfDB(cate, news)
 	if err != nil {
